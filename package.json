@@ -1,0 +1,33 @@
+{
+  "name": "cards-against-humanity",
+  "version": "1.0.0",
+  "description": "A Cards Against Humanity Clone By Wowkster",
+  "main": "dist/app.js",
+  "scripts": {
+    "build": "tsc",
+    "start:noc": "node dist/app.js",
+    "start": "npm run build && npm run start:noc"
+  },
+  "type": "module",
+  "author": "Wowkster",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "google-auth-library": "^7.10.4",
+    "mongodb": "^4.2.2",
+    "mysql": "^2.18.1",
+    "socket.io": "^4.4.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/express": "^4.17.13",
+    "@types/express-session": "^1.17.4",
+    "@types/mysql": "^2.15.19",
+    "@wowkster/prettier-config": "^1.0.1"
+  },
+  "prettier": "@wowkster/prettier-config"
+}

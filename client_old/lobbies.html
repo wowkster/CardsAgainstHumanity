@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>Cards Against Humanity</title>
+    
+    <style>
+        body{
+            background:none;
+        }
+        html { 
+          /* background: url('https://images.unsplash.com/44/HsQM7Jd2Qlysfyk9SgvX_logarska-valley-5.jpg?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1055&q=80') no-repeat center center fixed;  */
+          -webkit-background-size: cover;
+          -moz-background-size: cover;
+          -o-background-size: cover;
+          background-size: cover;
+          height:100%;
+        }
+        .container:not(#gamesContainer) {
+            text-align:center;
+            width:35%;
+            margin-top:10em;
+        }
+        .left-align {
+            text-align:left;
+            margin:1.5em;
+        }
+        .text-custom{
+            color:black;
+            /* text-shadow:0 0 2px black; */
+        }
+        .text-red{
+            color:red;
+            text-shadow:0 0 2px black;
+        }
+        #signUpForm {
+            display:none;
+        }
+        .link-custom:hover{
+            text-decoration:underline;
+            cursor: pointer;
+        }
+        .game-listing {
+            margin:0.5em;
+            padding:1em;
+        }
+        
+    </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Cards Against Humanity</a>
+    <ul class="navbar-nav mr-auto"></ul>
+    <a class="btn btn-outline-success my-2 my-sm-0" href="/logout">Log Out</a>
+  </nav>
+  <br>
+
+  <!--add code here-->
+  <div id="gamesContainer" class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <h1>Current Lobbies</h1>
+      </div>
+      <div class="col-sm-6">
+        <button class="btn btn-outline-secondary">Create Game</button>
+      </div>
+    </div>
+    <br>
+    <br>
+    <div class="row">
+      <div class="col-sm-3 game-listing bg-success">
+        <h3>Main Game</h3>
+        <p>Host: Adyo Wowk (this is the only game for now)</p>
+        <a href="/room" class="btn btn-dark">Join Game</a>
+      </div>
+    </div>
+  </div>
+
+  
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!--<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>-->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    
+</body>
+
+</html>

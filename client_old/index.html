@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>Cards Against Humanity</title>
+    
+    <style>
+        body{
+            background:none;
+        }
+        html { 
+          /* background: url('https://images.unsplash.com/44/HsQM7Jd2Qlysfyk9SgvX_logarska-valley-5.jpg?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1055&q=80') no-repeat center center fixed;  */
+          -webkit-background-size: cover;
+          -moz-background-size: cover;
+          -o-background-size: cover;
+          background-size: cover;
+          height:100%;
+        }
+        .container:not(#gamesContainer):not(#mainGame) {
+            text-align:center;
+            width:35%;
+            margin-top:10em;
+        }
+        .left-align {
+            text-align:left;
+            margin:1.5em;
+        }
+        .text-custom{
+            color:black;
+            /* text-shadow:0 0 2px black; */
+        }
+        .text-red{
+            color:red;
+            text-shadow:0 0 2px black;
+        }
+        #signUpForm {
+            display:none;
+        }
+        .link-custom:hover{
+            text-decoration:underline;
+            cursor: pointer;
+        }
+        .game-listing {
+            margin:0.5em;
+            padding:1em;
+        }
+        .card{
+            width:250px;
+            height:350px;
+            border-radius:10px;
+            font-weight:bold;
+            padding:1em;
+            margin:1em;
+            font-size:120%;
+            box-shadow:4px 4px 3px black;
+        }
+        #prompt {
+            color:white;
+            background-color:black;
+            /*border: 1px solid white;*/
+            margin:1em auto;
+            box-shadow:4px 4px 3px gray;
+
+        }
+        .response{
+            width:200px;
+            height:280px;
+            color:black;
+            background-color:white;
+            border: 1px solid black;
+            float:left;
+        }
+        .response:hover{
+            background-color:#DDD;
+        }
+        .response-group{
+            
+        }
+        #confirmButton{
+            width:250px;
+            margin:1em auto;
+            
+        }
+        .confirm-button{
+            text-align:center;
+            width:250px;
+            margin:0 auto;
+        }
+        .player{
+            background-color:white;
+            border:1px solid black;
+            color:black;
+            padding:0.5em 1em;
+            margin:0:auto;
+        }
+        .player p,small{
+            margin:0;
+        }
+        #players{
+            height:200px;
+            margin:1em auto;
+            overflow:auto;
+        }
+        .myCard{
+            width:125px;
+            height:175px;
+            border-radius:10px;
+            font-weight:normal;
+            padding:1em;
+            margin:1em;
+            color:black;
+            background-color:white;
+            border: 1px solid black;
+            float:left;
+            box-shadow:3px 3px 2px gray;
+            font-size:80%;
+
+        }
+        .myCard:hover{
+            background-color:#DDD;
+        }
+        .border-top-black{
+            border-top:1px solid black;
+        }
+        .border-right-black{
+            border-right:1px solid black;
+        }
+        h2{
+            height:80%;
+            width:100%;
+            margin:auto;
+            text-align:center;
+        }
+        .active {
+            background-color:lightblue;
+        }
+        .active:hover{
+            background-color:#9CC7D5;  
+        }
+        
+        .winner{
+            background-color:lightgreen;
+        }
+        .loser{
+            background-color:#FFDDDD;
+        }
+        .winner:hover{
+            background-color:lightgreen;
+        }
+        .loser:hover{
+            background-color:#FFDDDD;
+        }
+        
+    </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Cards Against Humanity</a>
+    <ul class="navbar-nav mr-auto"></ul>
+    <a class="btn btn-outline-success my-2 my-sm-0" href="/logout">Log Out</a>
+  </nav>
+
+
+<div class="container-fluid" id="mainGame">
+    <div class="row">
+        <div class="col-sm-3 border-right-black">
+            <h2>Black Card: <span id="playerNumber"></span></h2>
+        </div>
+        <div class="col-sm-9">
+            <h2>Responses:</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3 border-right-black">
+            <div id="prompt" class="card">
+                
+            </div>
+        </div>
+        <div class="col-sm-9" id="responses">
+        </div>
+    </div>
+    <div class="row border-top-black">
+        <div class="col-sm-3 border-right-black">
+            <button id="confirmButton">Confirm Selection</button>
+        </div>
+        <div class="col-sm-3">
+            <h2 id="roleLabel">Your Role: Player</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3 border-top-black border-right-black">
+            <div id="players">
+                <div class="player">
+                    <p>Name</p>
+                    <small>Score: 5</small>
+                </div>
+                <div class="player">
+                    <p>Name</p>
+                    <small>Score: 5</small>
+                </div>
+                <div class="player">
+                    <p>Name</p>
+                    <small>Score: 5</small>
+                </div>
+                <div class="player">
+                    <p>Name</p>
+                    <small>Score: 5</small>
+                </div>
+                <div class="player">
+                    <p>Name</p>
+                    <small>Score: 5</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-9" id="myCards">
+            <div class="myCard">
+                ...
+            </div>
+            <div class="myCard">
+                ...
+            </div>
+            <div class="myCard">
+                ...
+            </div>
+            <div class="myCard">
+                ...
+            </div>
+            <div class="myCard">
+                ...
+            </div>
+            <div class="myCard">
+                ...
+            </div>
+            <div class="myCard">
+                ...
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    
+    
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <!--<script src="/../socket.io/socket.io.js"></script>-->
+    <script>
+        //create socket connection
+        // var socket = io('wss://adrianwowk.com', {transportOptions: {
+        //     polling: {
+        //         extraHeaders: {
+        //             'x-clientid': 'abc'
+        //         }
+        //     }
+        // }});
+        
+        var socket = io('wss://adrianwowk.com', {});
+        
+        socket.on('connect_failed', function() {
+            document.write("Sorry, there seems to be an issue with the connection!");
+        })
+        
+        var playerId;
+        var myWhiteCards = [];
+        var responses = [];
+        var isCardCzar = false;
+        var selectedWhiteCardId;
+        var selectedResponseId;
+        var selection;
+        var submittedCard = false;
+        
+        //update player data when comm received
+        socket.on('playerData', function(data){
+            //recieve ids
+            //translate to text
+            playerId = data.id;
+            document.getElementById('playerNumber').innerHTML = data.players;
+            console.log(data.sockets)
+            
+            
+            $.getJSON( "/game/client/data.json", function( cardData ) {
+                myWhiteCards = [];
+                var whites = cardData[1];
+                var inner = '';
+                
+                
+                for (let j = 0; j < data.whiteCards.length; j++){
+                    // console.log(whites[j]);
+                    for (let i = 0; i < whites.length; i++){
+                        if (i == data.whiteCards[j]){
+                            myWhiteCards.push(whites[i].contents);
+                            var act;
+                            if (j == selectedWhiteCardId && $(selection).hasClass('myCard')){
+                                act = "active";
+                            }
+                            else{
+                                act = "";
+                            }
+                            inner += '<div class="myCard ' + act + '" id="'+ j + 'white" data-card-id="' + i + '">' + whites[i].contents + '</div>'
+                        }
+                    }
+                }
+                
+                // console.log(myWhiteCards);
+                if ($('#myCards').html() != inner){
+                    $('#myCards').html(inner);
+                }
+            });
+                
+            
+            // wins:socket.wins
+        });
+        
+        socket.on('sendCard', function(data){
+             $.getJSON( "/game/client/data.json", function( blackData ) {
+                //  console.log(data);
+                //  console.log(blackData)
+                var inner = blackData[0][data.blackCardId].contents
+                if ($('#prompt').html() != inner){
+                    $('#prompt').html(inner);
+                }
+                
+                
+                $.getJSON( "/game/client/data.json", function( cardData ) {
+                responses = [];
+                var whites = cardData[1];
+                var inner = '';
+                // console.log(data)
+                
+                for (let j = 0; j < data.responses.length; j++){
+                    for (let i = 0; i < whites.length; i++){
+                        if (i == data.responses[j].cardId){
+                            responses.push(whites[i].contents);
+                            var act;
+                            if (j == selectedResponseId && $(selection).hasClass('response')){
+                                act = "active";
+                            }
+                            else{
+                                act = "";
+                            }
+                            inner += '<div class="response card ' + act + '" id="' + data.cardId + '">' + whites[i].contents + '</div>'
+                        }
+                    }
+                }
+                
+                // console.log(myWhiteCards);
+                if ($('#responses').html() != inner){
+                    $('#responses').html(inner);
+                }
+            });
+                
+                
+            });
+        })
+        
+        
+        //client-side selecting
+        
+        $('#responses').on('click', '.response', function(event) {
+            if (!isCardCzar){
+                $(selection).removeClass('active');
+                $("#" + selectedResponseId).removeClass('active');
+                $(this).addClass('active');
+                selection = this;
+                selectedResponseId = $(".response.active").attr('id');
+            }
+        });
+        
+        
+        $('#myCards').on('click', '.myCard', function(event) {
+            if (isCardCzar == false && !submittedCard){
+                $(selection).removeClass('active');
+                $("#" + selectedWhiteCardId + "white").removeClass('active');
+                $(this).addClass('active');
+                selection = this;
+                selectedWhiteCardId = parseInt($(".myCard.active").attr('id'));
+            }
+        });
+        
+        
+        
+        $('#confirmButton').click(function(){
+            //card or winner selection
+            $(this).prop("disabled",true);
+            $(selection).removeClass('active');
+             
+            if ($(selection).hasClass('response')){
+                $(this).prop("disabled",false);
+                socket.emit('winner', {
+                    cardId:$(selection).attr('id'),
+                    playerId:$(selection).attr('data-player-id')
+                });
+            } else{
+                socket.emit('submitCard', {
+                    cardId:$(selection).attr('data-card-id'),
+                    playerId:playerId
+                });
+                submittedCard = true;
+                console.log('submitted');
+                $(selection).removeClass('active');
+                selectedWhiteCardId = undefined;
+            }
+            //send winner to server
+            
+            //emit id to server
+            
+            
+            //then recieve winner data and updateclasses
+           
+            
+            
+        });
+        socket.on('roundWinner', function(data){
+                //card id
+            $('#' + data.cardId).addClass('winner');
+                //player id
+                // $('#' + data.playerId).addClass('winner');
+            $('.response:not(.winner)').addClass('loser');
+        });
+        
+        
+            
+        socket.on('newRound', function(data){
+            submittedCard = false;
+            $('#confirmButton').prop("disabled",false);
+            $('#responses').html("");
+            console.log('new Round');
+            if (data.cardCzarId == playerId){
+                isCardCzar = true;
+                $('#myCards').hide();
+                $('#roleLabel').html('Your Role: Card Czar');
+                
+                
+            }
+            else {
+                isCardCzar = false;
+                $('#myCards').show();
+                $('#roleLabel').html('Your Role: Player');
+            }
+            $(".response").removeClass('winner');
+            $(".response").removeClass('loser');
+            
+            $.getJSON( "/game/client/data.json", function( cardData ) {
+                console.log(cardData);
+                console.log(data);
+                var inner = cardData[0][data.blackCardId].contents
+                
+                // console.log(myWhiteCards);
+                if ($('#prompt').html() != inner){
+                    $('#prompt').html(inner);
+                }
+            });
+            
+        });
+        
+    </script>
+  
+</body>
+
+</html>
+
