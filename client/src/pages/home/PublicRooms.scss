@@ -1,0 +1,92 @@
+.rooms {
+    height: 100%;
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas:
+        'search .'
+        'listings listings';
+
+    & > * {
+        height: 100%;
+    }
+
+    &__search {
+        grid-area: search;
+    }
+
+    &__listings {
+        grid-area: listings;
+
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    &__listing {
+        background-color: white;
+        color: black;
+
+        border-radius: 5px;
+        display: flex;
+        gap: 1rem;
+        padding: 0.5rem;
+
+        &__avatar {
+            border-radius: 5px;
+        }
+
+        &__data {
+            flex-grow: 2;
+
+            &__title {
+                color: black;
+            }
+
+            &__rule {
+                color: #ccc;
+                margin: 0.25rem 0;
+            }
+
+            &__players {
+                font-weight: bold;
+            }
+
+            &[data-status='queuing'] &__status,
+            &[data-status='queuing'] &__players {
+                color: #53BD00;
+            }
+
+            &[data-status='started'] &__status,
+            &[data-status='started'] &__players {
+                color: #D79B01;
+            }
+
+            &[data-status='full'] &__status,
+            &[data-status='full'] &__players {
+                color: #E53935;
+            }
+        }
+
+        &__buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 6rem;
+
+            button {
+                border: 1px solid #0d0d0d;
+                width: 100%;
+                padding: 0.25rem 0.5rem;
+                border-radius: 5px;
+            }
+
+            &__join {
+                background-color: #0d0d0d;
+                color: white;
+            }
+        }
+    }
+}

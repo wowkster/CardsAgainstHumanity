@@ -1,0 +1,148 @@
+.page {
+    background-color: #0d0d0d;
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login {
+    background-color: #ffffff;
+    border-radius: 10px;
+    width: 32rem;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem 0;
+
+    $primary: #343434;
+    $light: lighten(
+        $color: rgb(0 0 0),
+        $amount: 80
+    );
+    $lightBorder: 2px solid $light;
+
+    &__logo {
+        width: 40%;
+    }
+
+    &__title {
+        font-size: 1.5rem;
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        width: 80%;
+        gap: 0.5rem;
+
+        &__error {
+            $errColor: hsl(0, 100, 65);
+
+            // border: 2px solid $errColor;
+            // color: $errColor;
+            background-color: $errColor;
+            color: white;
+
+            border-radius: 5px;
+            padding: 0.5rem;
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+
+            & *:first-child {
+                width: 2.25rem;
+                height: 2.25rem;
+            }
+
+            & *:last-child {
+                width: 100%;
+            }
+        }
+
+        &__label {
+            display: flex;
+            flex-direction: column;
+
+            input {
+                border: $lightBorder;
+                background-color: white;
+                border-radius: 5px;
+                padding: 0.5rem;
+                width: 100%;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 2rem;
+                font-size: 0.75rem;
+
+                &:focus {
+                    outline: $primary sloid 1px;
+                }
+            }
+        }
+
+        &__submit {
+            border-radius: 5px;
+            padding: 0.5rem;
+            width: 100%;
+            color: white;
+            background-color: $primary;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+    }
+
+    &__rule {
+        color: $light;
+        width: calc(80% - 10px);
+        height: 2px;
+    }
+
+    &__buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 80%;
+
+        gap: 1rem;
+
+        $discord: #5865f2;
+
+        button {
+            border-radius: 5px;
+            padding: 0.5rem;
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1rem;
+        }
+
+        &__google {
+            border: $lightBorder;
+            background-color: white;
+            color: $primary;
+        }
+
+        &__discord {
+            background-color: $discord;
+            color: white;
+        }
+    }
+
+    &__footnote {
+        font-size: 1rem;
+        text-align: center;
+        width: 80%;
+
+        &__link {
+            color: #00b2ff;
+            text-decoration: underline;
+        }
+    }
+}

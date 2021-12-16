@@ -1,42 +1,41 @@
-import express from 'express'
-import session, { Session } from 'express-session'
-import path from 'path'
-import bcrypt from 'bcrypt'
-import http from 'http'
-import { Server } from 'socket.io'
-import { OAuth2Client } from 'google-auth-library'
+import createFastify from 'fastify'
+import cors from 'fastify-cors'
+import fastifyCookie, { FastifyCookieOptions } from 'fastify-cookie'
+import fastifySocketIO from 'fastify-socket.io'
+import router from './routes/index.js'
 
-import { getDocument, insertOne, MONGO_CLIENT } from './mongo.js'
-import { User } from './types/User.js'
-
-declare module 'express-session' {
-    interface SessionData {
-        user: User
-    }
-
-    interface Session {
-        destroyAsync: () => Promise<Session>
-    }
-}
-
-Session.prototype.destroyAsync = function (): Promise<Session> {
-    const ctx = this
-    return new Promise((res, rej) => {
-        ctx.destroy(err => {
-            if (err) return rej(err)
-            res(ctx)
-        })
-    })
-}
+import { MONGO_CLIENT } from './util/mongo.js'
+import authPlugin from './plugins/authPlugin.js'
+import jsonReplyPlugin from './plugins/jsonReplyPlugin.js'
 
 await MONGO_CLIENT.connect()
-const client = new OAuth2Client(process.env.CLIENT_ID)
 
-const app = express()
-const server = http.createServer(app)
-const router = express.Router()
+const fastify = createFastify({
+    logger: {
+        level: 'debug',
+        prettyPrint:
+            process.env.NODE_ENV === 'development'
+                ? {
+                      translateTime: 'HH:MM:ss Z',
+                      ignore: 'pid,hostname',
+                  }
+                : false,
+    },
+    ignoreTrailingSlash: true,
+    pluginTimeout: 20000,
+    trustProxy: true,
+})
 
-const io = new Server(server, {
+fastify.register(cors)
+fastify.register(authPlugin)
+fastify.register(jsonReplyPlugin)
+
+fastify.register(fastifyCookie, {
+    secret: "this is my super poggers secret", // for cookies signature
+    parseOptions: {}     // options for parsing cookies
+  } as FastifyCookieOptions)
+
+fastify.register(fastifySocketIO, {
     path: '/socket.io',
     serveClient: false,
     // below are engine.IO options
@@ -45,207 +44,16 @@ const io = new Server(server, {
     cookie: false,
 })
 
-app.use(
-    session({
-        secret: 'secret',
-        resave: true,
-        saveUninitialized: true,
-    })
-)
-
-app.use(express.json())
-
-router.post('/auth/google', async (req, res) => {
-    const { token } = req.body
-    const ticket = await client.verifyIdToken({
-        idToken: token,
-        audience: process.env.CLIENT_ID,
-    })
-    const { name, email, picture } = ticket.getPayload() ?? {}
-
-    // If user is already in DB, jsut return the db stuff
-    const existingUser = (await getDocument('users', { email })) as User
-
-    if (existingUser) {
-        return res.status(200).json({
-            username: existingUser.username,
-            email: existingUser.email,
-            avatarUrl: existingUser.avatarUrl,
-        })
-    }
-
-    // Insert User into DB
-
-    if (!email) return res.status(400).send('Email was not recieved from provider')
-    if (!name) return res.status(400).send('Username was not recieved from provider')
-    if (!picture) return res.status(400).send('Avatar was not recieved from provider')
-
-    const user: User = {
-        email: email,
-        username: name,
-        avatarUrl: picture,
-    }
-
-    await insertOne('users', user)
-
-    req.session.user = user
-    res.status(201).json(user)
+fastify.register(router, {
+    prefix: '/api/v1',
 })
 
-router.delete("/auth/logout", async (req, res) => {
-    await req.session.destroyAsync()
-    
-    res.status(200)
-    res.json({
-        message: "Logged out successfully"
-    })
-})
-
-router.get("/@me", async (req, res) => {
-    const {user} = req.session
-
-    if (!user) return res.status(401).send('Not logged in!')
-
-    res.status(200)
-    res.json(req.session.user)
-})
-
-app.use('/api/v1', router)
-server.listen(process.env.HTTP_PORT, () => {
-    console.log(`Server is live on http://localhost:${process.env.HTTP_PORT}`)
-})
-
-// router.get('/', async (req, res) => {
-//     if (!req.session.user) return res.redirect('/login')
-
-//     if (req.session.loggedin) {
-//         res.redirect('/home')
-//         res.end()
-//     } else {
-//         res.sendFile(path.join(0 + '/client/login.html'))
-//     }
-// })
-
-// app.post('/auth', function (request, response) {
-//     var username = request.body.username
-//     var password = request.body.password
-//     var signUp = request.body.signUp
-//     if (signUp == '1') {
-//         //Sign Up
-//         var email = request.body.email
-//         if (username && password && email) {
-//             connection.query('SELECT * FROM users WHERE email = ?', [email], function (error, results, fields) {
-//                 if (results.length > 0) {
-//                     response.send('Email Already Taken')
-//                     response.end()
-//                 } else {
-//                     connection.query(
-//                         'SELECT * FROM users WHERE username = ?',
-//                         [username],
-//                         function (error, results, fields) {
-//                             if (results.length > 0) {
-//                                 response.send('Username Already Taken')
-//                                 response.end()
-//                             } else {
-//                                 bcrypt.hash(password, 10, function (err, hash) {
-//                                     // Store hash in database
-//                                     connection.query(
-//                                         'INSERT INTO users (`username`, `email`, `password`) VALUES (?, ?, ?)',
-//                                         [username, email, hash],
-//                                         function (error, results, fields) {
-//                                             if (error) {
-//                                                 response.send(error)
-//                                                 response.end()
-//                                             } else {
-//                                                 request.session.loggedin = true
-//                                                 request.session.username = username
-//                                                 response.redirect('/home')
-//                                                 response.end()
-//                                             }
-//                                         }
-//                                     )
-//                                 })
-//                             }
-//                         }
-//                     )
-//                 }
-//             })
-//         } else {
-//             response.send('<p>Please enter Username, Email, and Password!</p><a href="/">Go Back</a>')
-//             response.end()
-//         }
-//     } else {
-//         //login
-//         if (username && password) {
-//             connection.query(
-//                 'SELECT password FROM users WHERE (username = ? OR email = ?) LIMIT 1',
-//                 [username, username],
-//                 function (error, results, fields) {
-//                     if (error) {
-//                         response.send(error)
-//                         response.end()
-//                     } else {
-//                         if (results.length > 0) {
-//                             bcrypt.compare(password, results[0].password, function (err, res) {
-//                                 if (res) {
-//                                     // Passwords match
-//                                     // response.send('Logged In! Redirecting...');
-//                                     request.session.loggedin = true
-//                                     request.session.username = username
-//                                     response.redirect('/home')
-//                                     response.end()
-//                                 } else {
-//                                     // Passwords don't match
-//                                     response.send('<p>Incorrect Username and/or Password!<p><a href="/">Go Back</a>')
-//                                     response.end()
-//                                 }
-//                             })
-//                         } else {
-//                             //user doesn't exist
-//                             response.send('<p>Incorrect Username and/or Password!<p><a href="/">Go Back</a>')
-//                             response.end()
-//                         }
-//                     }
-//                 }
-//             )
-//         } else {
-//             response.send('<p>Please enter Username and Password!</p><a href="/">Go Back</a>')
-//             response.end()
-//         }
-//     }
-// })
-
-// app.get('/home', function (request, response) {
-//     if (request.session.loggedin) {
-//         // 		response.send('Welcome back, ' + request.session.username + '!');
-//         response.sendFile(__dirname + '/client/lobbies.html')
-//     } else {
-//         response.redirect('/')
-//         response.end()
-//     }
-// })
-
-// app.get('/room', function (request, response) {
-//     if (request.session.loggedin) {
-//         response.sendFile(__dirname + '/client/index.html')
-//     } else {
-//         response.redirect('/')
-//         response.end()
-//     }
-// })
-
-// app.get('/logout', function (request, response) {
-//     if (request.session.loggedin) {
-//         request.session.destroy()
-//         response.redirect('/')
-//         response.end()
-//     } else {
-//         response.redirect('/home')
-//         response.end()
-//     }
-// })
-
-
+try {
+    await fastify.listen(process.env.HTTP_PORT ?? 5000, '0.0.0.0')
+} catch (err) {
+    console.log('Error: ', err)
+    process.exit(1)
+}
 
 // // GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME GAME
 

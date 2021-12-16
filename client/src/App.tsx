@@ -1,35 +1,44 @@
-import './App.css'
-import GoogleLogin from 'react-google-login'
+import axios from 'axios'
+import { useAuth } from 'hooks'
+import React, { FC, Suspense, useEffect } from 'react'
+import { useRoutes } from 'react-router-dom'
+import routes from 'routes'
+import 'styles/App.scss'
+import { wrapPromise } from 'utils'
 
-function App() {
-    const handleLogin = async googleData => {
-        const res = await fetch('/api/v1/auth/google', {
-            method: 'POST',
-            body: JSON.stringify({
-                token: googleData.tokenId,
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        const data = await res.json()
-		console.log(data)
-        // store returned user somehow
+async function fetchUser() {
+    try {
+        const res = await axios.get('/api/v1/user/@me', {withCredentials: true})
+        const { data } = res
+        return data ?? null
+    } catch {
+        return null
     }
+}
 
+const initUser = wrapPromise(fetchUser())
+
+const App = () => {
     return (
-        <div className='App'>
-            <header className='App-header'>
-                <GoogleLogin
-                    clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID ?? ''}
-                    buttonText='Log in with Google'
-                    onSuccess={handleLogin}
-                    onFailure={handleLogin}
-                    cookiePolicy={'single_host_origin'}
-                />
-            </header>
-        </div>
+        <Suspense fallback='loading...'>
+            <Routing />
+        </Suspense>
     )
+}
+
+const Routing: FC<{}> = ({}) => {
+    const {setUser} = useAuth()
+
+    const user = initUser.read()
+    console.log('Suspense User:', user)
+
+    if (user) setUser(user)
+
+    const routing = useRoutes(routes(!!user))
+
+    console.log('Suspense Logged In:', !!user)
+
+    return routing
 }
 
 export default App

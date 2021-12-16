@@ -1,0 +1,9 @@
+.anchor {
+    color: #00B2FF;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}

@@ -1,0 +1,11 @@
+.create-room {
+    height: 100%;
+    background-color: white;
+    color: black;
+    padding: 1rem;
+    border-radius: 5px;
+
+    &__title {
+        color: black;
+    }
+}
