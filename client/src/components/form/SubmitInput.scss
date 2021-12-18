@@ -1,5 +1,9 @@
-.formInput {
+.form {
     &__submit {
+        background-color: white;
+    
+        padding-left: 0.5rem;
+
         width: 100%;
         display: flex;
         align-items: center;

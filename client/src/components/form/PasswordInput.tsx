@@ -1,21 +1,26 @@
 import React, { FC, InputHTMLAttributes, useState } from 'react'
 
-import './TextInput.scss'
+import './PasswordInput.scss'
 
-type TextInputProps = {
+type PasswordInputProps = {
     label: string
     id: string
     onChange: (value: string) => void
 } & InputHTMLAttributes<HTMLInputElement>
 
-const TextInput: FC<TextInputProps> = ({ label, id, onChange, ...rest }) => {
+const PasswordInput: FC<PasswordInputProps> = ({
+    label,
+    id,
+    onChange,
+    ...rest
+}) => {
     const [value, setValue] = useState('')
 
     return (
-        <label htmlFor={id} className='form__text'>
+        <label htmlFor={id} className='form__password'>
             {label}
             <input
-                type='text'
+                type='password'
                 name={id}
                 id={id}
                 value={value}
@@ -23,11 +28,12 @@ const TextInput: FC<TextInputProps> = ({ label, id, onChange, ...rest }) => {
                     setValue(evt.target.value)
                     onChange(evt.target.value)
                 }}
-                className='form__text__input'
+                className='form__password__input'
                 {...rest}
             />
+            <span className='form__password__floating'>{label}</span>
         </label>
     )
 }
 
-export default TextInput
+export default PasswordInput

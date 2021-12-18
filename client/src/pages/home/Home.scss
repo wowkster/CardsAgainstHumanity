@@ -23,6 +23,7 @@
 
     &__hero {
         grid-area: hero;
+        justify-content: space-between;
     }
 
     &__create {

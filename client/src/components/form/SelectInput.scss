@@ -1,0 +1,27 @@
+.form {
+    &__select {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+
+        &__wrapper {
+            background-color: #0d0d0d;
+            color: white;
+            border-radius: 5px;
+            padding: 0.25rem;
+
+            display: flex;
+            gap: 0.75rem;
+            justify-content: space-between;
+            align-items: center;
+
+            &__input {
+                background-color: inherit;
+
+                &:focus {
+                    outline: none;
+                }
+            }
+        }
+    }
+}
