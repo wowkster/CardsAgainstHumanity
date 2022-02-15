@@ -1,8 +1,8 @@
-import { FastifyPluginAsync, FastifyRequest, preHandlerHookHandler, preValidationHookHandler } from 'fastify'
+import { FastifyPluginAsync, preHandlerHookHandler } from 'fastify'
 import createPlugin from 'fastify-plugin'
-import { User } from '../types/User.js'
-import JWT, { JWTPayload, } from '../util/jwt.js'
-import { getDocument } from '../util/mongo.js'
+import { DB } from '../lib/mongodb/database'
+import { User } from '../lib/models/User'
+import JWT, { JWTPayload, } from '../util/jwt'
 
 declare module 'fastify' {
     interface FastifyRequest {
@@ -46,7 +46,7 @@ const authPluginAsync: FastifyPluginAsync<AuthPluginOptions> = async (fastify, o
 
         req.jwtPayload = payload
 
-        const user = (await getDocument('users', { email: payload.user.email })) as User
+        const user = await DB.getUserFromID(payload.userId)
         if (!user) return res.reply('User is invalid!', 403)
 
         req.user = user

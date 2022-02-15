@@ -3,3 +3,7 @@
 *.env
 /dist
 *.js
+/keys
+/.next
+/.swc
+./tsconfig.tsbuildinfo

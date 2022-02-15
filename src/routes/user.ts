@@ -1,9 +1,8 @@
 import { config as load_env } from 'dotenv'
 import { FastifyInstance } from 'fastify'
-import { getDocument, updateDocument } from '../util/mongo.js'
-import { clientSafeUser, User } from '../types/User.js'
-import { isValidBool, isValidEmail, isValidHttpUrl, isValidUsername } from '../util/validation.js'
-import { requireSignedIn } from '../plugins/authPlugin.js'
+import { getDocument, updateDocument } from '../util/mongo'
+import { isValidBool, isValidEmail, isValidHttpUrl, isValidUsername } from '../util/validation'
+import { requireSignedIn } from '../plugins/authPlugin'
 load_env()
 
 export default async function (fastify: FastifyInstance) {

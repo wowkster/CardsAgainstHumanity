@@ -1,17 +1,18 @@
 import jwt from 'jsonwebtoken'
-import { User } from '../types/User'
+import fs from 'fs'
 
-const jwtSigningKey = 'e9a36be091e90219dbee5b094d76aa757863ae3082ea1aef9a711f649da6460d'
+const privateKey = fs.readFileSync('keys/private.key')
+const publicKey = fs.readFileSync('keys/public.pem')
 
 export interface JWTPayload {
-    user: User
+    userId: string
 }
 
 export default class JWT {
     static create(payload: JWTPayload) {
         // Create the JWT
-        const token = jwt.sign(payload, jwtSigningKey, {
-            algorithm: 'HS256',
+        const token = jwt.sign(payload, privateKey, {
+            algorithm: 'RS256',
             expiresIn: '1w',
         })
 
@@ -20,18 +21,18 @@ export default class JWT {
 
     static isValid(token: string) {
         try {
-            jwt.verify(token, jwtSigningKey)
+            jwt.verify(token, publicKey)
             return true
         } catch (err) {
             return false
         }
     }
 
-    static decode(token: string): JWTPayload | undefined {
+    static decode(token: string): JWTPayload | null {
         try {
             return jwt.decode(token) as JWTPayload
         } catch {
-            return
+            return null
         }
     }
 }

@@ -1,8 +1,7 @@
 import { config as load_env } from 'dotenv'
 import { FastifyInstance } from 'fastify'
-import auth from './auth.js'
-import test from './test.js'
-import user from './user.js'
+import auth from './auth'
+import user from './user'
 load_env()
 
 export default async function (fastify: FastifyInstance) {
@@ -12,11 +11,6 @@ export default async function (fastify: FastifyInstance) {
     })
 
     fastify.register(user, {
-        prefix: '/user'
+        prefix: '/api/user'
     })
-
-    fastify.register(test, {
-        prefix: '/test'
-    })
-    
 }
