@@ -17,6 +17,7 @@ import styles from '../styles/Login.module.scss'
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 
+// TODO Add some cool svg animations like discord login
 const LoginPage: FC<{
     providers: OAuthProvider[]
 }> = ({ providers }) => {

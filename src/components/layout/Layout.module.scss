@@ -1,0 +1,28 @@
+.col {
+    width: 100%;
+}
+
+.row {
+    display: flex;
+    width: 100%;
+    gap: 3rem;
+}
+
+@media (max-width: 768px) {
+    .row {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+}
+
+.grid {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}

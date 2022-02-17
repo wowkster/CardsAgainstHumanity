@@ -15,6 +15,7 @@ import { MONGO_CLIENT } from './util/mongo'
 import authPlugin from './plugins/authPlugin'
 import jsonReplyPlugin from './plugins/jsonReplyPlugin'
 import { providers } from './OAuthSettings'
+import { CAH } from './lib/game/server'
 
 declare module 'fastify' {
     interface FastifyInstance {
@@ -68,11 +69,17 @@ const main = async () => {
     }).after(() => {
         fastify.next('/')
         fastify.next('/login')
+        fastify.next('/terms')
+        fastify.next('/room')
+        fastify.next('/room/*')
+        fastify.next('/settings')
     })
 
     await Promise.all(providers.map(provider => fastify.register(fastifyOauth2, provider)))
 
     await fastify.register(router)
+
+    CAH.instance = new CAH(fastify)
 
     try {
         await MONGO_CLIENT.connect()

@@ -63,8 +63,15 @@
 
 .main {
     color: white;
-    padding: 2rem;
+    padding: 3rem;
 }
+
+@media (max-width: 768px) {
+    .main {
+        padding: 2rem;
+    }
+}
+
 
 .footer {
     position: absolute;

@@ -1,10 +1,10 @@
 import React, { FC } from 'react'
 import Image from 'next/image'
 import { AiFillCaretDown } from 'react-icons/ai'
-import logoOnly from '../images/logoOnly.png'
-import profile from '../images/profile.png'
+import logoOnly from '../../images/logoOnly.png'
+import profile from '../../images/profile.png'
 
-import styles from '../styles/MainLayout.module.scss'
+import styles from './MainLayout.module.scss'
 
 const MainLayout: FC = ({ children }) => {
     return (

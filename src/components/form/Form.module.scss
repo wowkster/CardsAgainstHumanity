@@ -1,0 +1,39 @@
+$primary: #69e331;
+
+.form {
+    width: 100%;
+    display: flex;
+    margin: 1rem 0;
+}
+
+.textInput {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: medium;
+    border: none;
+    outline: none;
+    border-radius: 0.25rem;
+}
+
+.submit {
+    min-width: 6rem;
+    background-color: $primary;
+    font-size: medium;
+    border: none;
+    outline: none;
+    border-radius: 0.25rem;
+    padding: 0.75rem;
+    cursor: pointer;
+
+    &:hover {
+        background-color: lighten($color: $primary, $amount: 5);
+    }
+}
+
+.group {
+    &__row {
+        display: flex;
+        width: 100%;
+        gap: .75rem;
+    }
+}
